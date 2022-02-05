@@ -22,16 +22,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+import androidx.preference.PreferenceManager;
+
+import org.lineageos.settings.utils.FileUtils;
 
 public class DozeService extends Service {
     private static final String TAG = "DozeService";
     private static final boolean DEBUG = false;
 
+    private static final String DC_DIMMING_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable";
+    private static final String DC_DIMMING_ENABLE_KEY = "dc_dimming_enable";
+    private static final String HBM_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/hbm";
+    private static final String HBM_ENABLE_KEY = "hbm_mode";
+    private boolean enableDc;
+    private boolean enableHbm;
+
     private AodSensor mAodSensor;
     private ProximitySensor mProximitySensor;
     private PickupSensor mPickupSensor;
+    private SharedPreferences sharedPrefs;
 
     @Override
     public void onCreate() {
@@ -40,6 +52,7 @@ public class DozeService extends Service {
         mAodSensor = new AodSensor(this);
         mProximitySensor = new ProximitySensor(this);
         mPickupSensor = new PickupSensor(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         IntentFilter screenStateFilter = new IntentFilter();
         screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -81,6 +94,7 @@ public class DozeService extends Service {
         if (DozeUtils.isDozeAutoBrightnessEnabled(this)) {
             mAodSensor.disable();
         }
+        enableNode(true);
     }
 
     private void onDisplayOff() {
@@ -94,6 +108,17 @@ public class DozeService extends Service {
         }
         if (DozeUtils.isDozeAutoBrightnessEnabled(this)) {
             mAodSensor.enable();
+        }
+    }
+
+    private void enableNode(boolean status) {
+        enableDc = (sharedPrefs.getBoolean(DC_DIMMING_ENABLE_KEY, false));
+        enableHbm = (sharedPrefs.getBoolean(HBM_ENABLE_KEY, false));
+        if (enableDc) {
+            FileUtils.writeLine(DC_DIMMING_NODE, status ? "1" : "0");
+        }
+        if (enableHbm) {
+            FileUtils.writeLine(HBM_NODE, status ? "1" : "0");
         }
     }
 
