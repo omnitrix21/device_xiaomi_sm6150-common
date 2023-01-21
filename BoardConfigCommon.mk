@@ -22,6 +22,7 @@ COMMON_PATH := device/xiaomi/sm6150-common
 include vendor/xiaomi/sm6150-common/BoardConfigVendor.mk
 
 BUILD_BROKEN_CLANG_PROPERTY := true
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 
 # Architecture
 TARGET_ARCH := arm64
