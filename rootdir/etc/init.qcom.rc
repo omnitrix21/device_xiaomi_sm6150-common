@@ -136,8 +136,8 @@ on boot
     enable vendor.dataadpl
 
     # Allow system to modify exposure adjustment state
-    chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable
-    chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable
+    chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/anti_flicker
+    chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display/anti_flicker
 
     chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/hbm
     chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display/hbm
