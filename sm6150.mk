@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+PRODUCT_BROKEN_VERIFY_USES_LIBRARIES := true
+
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 

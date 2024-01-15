@@ -2,3 +2,6 @@
 attribute hal_dms;
 attribute hal_dms_client;
 attribute hal_dms_server;
+
+attribute pixel_battery_domain;
+attribute pixel_battery_service_type;
